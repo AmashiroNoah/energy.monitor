@@ -49,7 +49,7 @@ Item {
 
 
     // main variables
-    property double power_avg: Power.getPower(batteryList)
+    property double power_avg: Power.getPower(batteryList,interval)
     property double capacity_avg: batteryPercent
     property int samples: 1
 
@@ -114,7 +114,7 @@ Item {
         triggeredOnStart: true
         onTriggered: {
             //current power
-            var power = Power.getPower(batteryList);
+            var power = Power.getPower(batteryList,interval);
 
             //avg
             energyMonitor.power_avg += power;

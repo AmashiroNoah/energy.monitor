@@ -87,7 +87,7 @@ Item {
             running: true
             triggeredOnStart: true
             onTriggered: {
-                label1.power = Power.getPower(batteryList);
+                label1.power = Power.getPower(batteryList,interval);
                 if(isOnBattery) {
                     label1.text = label1.power + "⬇";
                     label1.color = "red";

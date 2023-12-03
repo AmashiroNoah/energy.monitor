@@ -44,7 +44,7 @@ function getBatteryPaths() {
 }
 
 
-function getPower(batteryURLs) {
+function getPower(batteryURLs,interval) {
     if(batteryURLs === undefined) {
         return 0.0;
     }
@@ -66,15 +66,23 @@ function getPower(batteryURLs) {
                 totalPower += Math.round(power * 10) / 10;
             }
         } else {
-            // V * I
+            // V * I or d(V*C)/dt
             var curReq = new XMLHttpRequest();
             var voltReq = new XMLHttpRequest();
+            var chargeReq = new XMLHttpRequest();
             curReq.open("GET", battery.url + "/current_now", false);
             voltReq.open("GET", battery.url + "/voltage_now", false);
+            chargeReq.open("GET", battery.url + "/charge_now", false);
             curReq.send(null);
             voltReq.send(null);
+            chargeReq.send(null);
+            // V * I
             if(curReq.responseText != "" && voltReq.responseText != "") {
                 var power = (parseInt(curReq.responseText) * parseInt(voltReq.responseText)) / 1000000000000;
+                totalPower += Math.round(power * 10) / 10;
+            } // d(V*C)/dt
+            else if(voltReq.responseText != "" && chargeReq.responseText != ""){
+                var power = (parseInt(chargeReq.responseText) * parseInt(voltReq.responseText)) / (1000000000000*interval);
                 totalPower += Math.round(power * 10) / 10;
             }
         }
